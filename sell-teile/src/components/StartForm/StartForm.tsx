@@ -1,18 +1,15 @@
 
 import React, { ChangeEvent, FormEvent, useState } from 'react'
-import Modal from 'react-modal'
 import { User } from '../../types'
+import { firebaseLogin } from '../../utils/firebaseFunctions'
 
 
 
-function StartForm() {
+function StartForm({handler}:any):JSX.Element {
 
-  const [modalIsOpen, setModalIsOpen] = useState(false)
-  const [userCredentials, setuserCredentials] = useState<User>({ name: '', password: 0 })
+  const [userCredentials, setuserCredentials] = useState<User>({ email: '', password: 0 })
 
-  const closeModal = () => {
-    setModalIsOpen(false)
-  }
+ 
 
 
   const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -29,10 +26,15 @@ function StartForm() {
 
   }
 
-  const handleSubmit = (event: FormEvent) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     console.log(userCredentials)
-  
+    const user = await firebaseLogin(userCredentials)
+    if(user) {
+      handler(true)
+    }
+   
+
 
 
   }
@@ -40,27 +42,19 @@ function StartForm() {
   return (
 
     <div className="start_form_container">
-      <div className="start_form_button_container">
-        <button
-          onClick={() => setModalIsOpen(true)}
-          className="sign_in_button">Log In
-         </button>
-        <Modal
-          isOpen={modalIsOpen}
-          onRequestClose={closeModal}
-          contentLabel={'Login Daten eingeben!'}
-        >
+      
+       
+       
           <form action="submit">
-            <label htmlFor="benutzer_name">Benutzer Name</label>
-            <input name='name' type="text" onChange={handleNameChange} />
+            <label htmlFor="email">Email</label>
+            <input name='email' type="email" onChange={handleNameChange} />
             <label htmlFor="password">Passwort</label>
             <input name='password' type="text" onChange={handlePasswordChange} />
             <button type="submit" onClick={handleSubmit}>Log in</button>
           </form>
 
-        </Modal>
+       
       </div>
-    </div>
   )
 
 }
