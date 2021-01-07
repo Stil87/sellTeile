@@ -2,7 +2,9 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react'
 import { User } from '../../types'
 import { firebaseLogin } from '../../utils/firebaseFunctions'
-import { CircularProgress } from '@material-ui/core'
+import { CircularProgress, Button, } from '@material-ui/core'
+import { Alert } from '@material-ui/lab'
+
 
 
 
@@ -10,6 +12,8 @@ function StartForm(): JSX.Element {
 
   const [userCredentials, setuserCredentials] = useState<User>({ email: '', password: 0 })
   const [progressBar, setprogressBar] = useState(false)
+  const [showAlert, setshowAlert] = useState(false)
+  const [errorMessafe, seterrorMessafe] = useState('')
 
 
 
@@ -32,7 +36,11 @@ function StartForm(): JSX.Element {
     setprogressBar(true)
     event.preventDefault();
     console.log(userCredentials)
-    const user = await firebaseLogin(userCredentials)
+    await firebaseLogin(userCredentials).then(res => {
+      if (res.message) {
+        seterrorMessafe(res.message)
+        setshowAlert(true)}
+    })
     setprogressBar(false)
 
 
@@ -45,7 +53,7 @@ function StartForm(): JSX.Element {
 
     <div className="start_form_container">
 
-      {progressBar ? <CircularProgress /> : null}
+
 
       <form action="submit">
         <label htmlFor="email">Email</label>
@@ -55,7 +63,12 @@ function StartForm(): JSX.Element {
         <button type="submit" onClick={handleSubmit}>Log in</button>
       </form>
 
+      {progressBar ? <CircularProgress /> : null}
 
+      {showAlert ?
+        <Alert onClose={() => setshowAlert(false)}>{errorMessafe}</Alert>
+        : null
+      }
     </div>
   )
 

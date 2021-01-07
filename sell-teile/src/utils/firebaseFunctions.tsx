@@ -17,7 +17,7 @@ export const firebaseLogin = async (user: User) => {
       console.log('fb functtions currentuser', fire.auth().currentUser)
       
       return user})
-    .catch(err => console.log(err))
+    .catch(err => err)
 
 }
 
