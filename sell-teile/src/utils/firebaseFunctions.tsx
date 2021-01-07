@@ -22,7 +22,7 @@ export const firebaseLogin = async (user: User) => {
 }
 
 export const firebaseLogOut = async () =>{
-  fire.auth().signOut()
+ await fire.auth().signOut()
   .then(res=> console.log('resulst log out ', res))
   .catch(err=> console.log(err))
 }

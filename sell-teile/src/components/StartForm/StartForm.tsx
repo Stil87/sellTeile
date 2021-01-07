@@ -5,7 +5,7 @@ import { firebaseLogin } from '../../utils/firebaseFunctions'
 
 
 
-function StartForm({handler}:any):JSX.Element {
+function StartForm():JSX.Element {
 
   const [userCredentials, setuserCredentials] = useState<User>({ email: '', password: 0 })
 
@@ -30,9 +30,7 @@ function StartForm({handler}:any):JSX.Element {
     event.preventDefault();
     console.log(userCredentials)
     const user = await firebaseLogin(userCredentials)
-    if(user) {
-      handler(true)
-    }
+ 
    
 
 

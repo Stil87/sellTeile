@@ -15,15 +15,13 @@ function App() {
 
   const [userLoggedIn, setUserLoggedIn] = useState(false)
 
-  function userloggedInHandler(isloggedIn: boolean): void {
-    if (isloggedIn) {
-      console.log('user is logged in')
-      setUserLoggedIn(true)
-    } else {
-      setUserLoggedIn(false)
-      console.log('user is logged out')
-    }
-  }
+
+
+  fire.auth().onAuthStateChanged(user => {
+    if (user) {setUserLoggedIn(true)}
+    else {setUserLoggedIn(false)}
+  })
+
 
 
 
@@ -35,8 +33,9 @@ function App() {
 
 
       {userLoggedIn
-       ? <MainPage /> 
-       : <StartForm handler={userloggedInHandler} />}
+        ? <MainPage />
+        : <StartForm
+        />}
 
     </div>
   );
