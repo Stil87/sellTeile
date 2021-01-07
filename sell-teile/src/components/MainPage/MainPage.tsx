@@ -1,12 +1,16 @@
-import { firebaseLogOut } from "../../utils/firebaseFunctions"
+import { MainAppBar } from "../Appbar/AppBar"
+import StartForm from "../StartForm/StartForm"
 
 
-export const MainPage = () => {
+export const MainPage = ({ userLoggedIn }: { userLoggedIn: boolean }): JSX.Element => {
 
-  return (<div>
-    <p>Helllo bitches</p>
+  if (!userLoggedIn) return (<StartForm />)
 
-    <button onClick={firebaseLogOut}>Log out</button>
-  </div>)
+  return (
+    <div>
+      <MainAppBar userLoggedIn={userLoggedIn} />
+
+
+    </div>)
 
 }

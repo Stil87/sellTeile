@@ -24,13 +24,9 @@ function App() {
   return (
     <div className="App">
 
-      <p>Hello</p>
 
 
-      {userLoggedIn
-        ? <MainPage />
-        : <StartForm
-        />}
+      <MainPage userLoggedIn={userLoggedIn} />
 
     </div>
   );
