@@ -11,15 +11,10 @@ import fire from './utils/firebaseConfig';
 
 
 function App() {
-
-
   const [userLoggedIn, setUserLoggedIn] = useState(false)
-
-
-
   fire.auth().onAuthStateChanged(user => {
-    if (user) {setUserLoggedIn(true)}
-    else {setUserLoggedIn(false)}
+    if (user) { setUserLoggedIn(true) }
+    else { setUserLoggedIn(false) }
   })
 
 
