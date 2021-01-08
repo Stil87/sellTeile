@@ -58,19 +58,16 @@ const useStyles = makeStyles((theme) => ({
 export const MainAppBar = ({ userLoggedIn }: { userLoggedIn: boolean }): JSX.Element => {
   const classes = useStyles()
   let buttonText = 'Login In';
-  let headerText = 'Ludolfs'
   // const [buttonText, setbuttonText] = useState('Log In')
 
   if (userLoggedIn) {
     // setbuttonText('Log out')
     buttonText = 'Log out';
-    headerText = 'Wie bei Ludolfs'
 
 
   } else {
     // setbuttonText('Log In')
     buttonText = ''
-    headerText = 'Bitte Einloggen'
 
   }
 

@@ -2,7 +2,7 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react'
 import { User } from '../../types'
 import { firebaseLogin } from '../../utils/firebaseFunctions'
-import { CircularProgress, Button, AppBar, } from '@material-ui/core'
+import { CircularProgress } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import { MainAppBar } from '../Appbar/AppBar'
 

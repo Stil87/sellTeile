@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import { MainPage } from './components/MainPage/MainPage';
-import StartForm from './components/StartForm/StartForm';
 import fire from './utils/firebaseConfig';
 
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import { CreatePartPage } from './components/createPartPage/CreatePartPage';
 
 
 
@@ -32,9 +33,16 @@ function App() {
   return (
     <div className="App">
 
-
-
+<Router>
+  <Switch>
+    <Route exact path={"/"}>
       <MainPage userLoggedIn={userLoggedIn} />
+    </Route>
+    <Route  path={"/Create"} component={CreatePartPage} />
+  </Switch>
+</Router>
+
+
 
     </div>
   );

@@ -1,6 +1,5 @@
 import { User } from "../types"
 import fire from "./firebaseConfig"
-import firebase from 'firebase'
 
 
 export const firebaseSignUp = async (user: User) => {
