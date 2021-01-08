@@ -1,14 +1,15 @@
+import { isJSDocNullableType } from "typescript";
 
 
-export interface Part {
-  id:number,
-  firebaseId?:string
+export type Part  = {
+  id?:number,
+  firebaseId:string
   title: string,
   model: string,
-  description : string,
+  description: string,
   pictures: string[],
   status: string,
-  date:Date,
-  onEbaySince: Date
+  date:string,
+  onEbaySince: string
 
-}
+} | null
