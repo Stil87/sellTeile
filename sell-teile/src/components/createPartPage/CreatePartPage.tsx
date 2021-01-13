@@ -1,8 +1,11 @@
 
-import { TextField , Fab} from '@material-ui/core'
-import {ArrowForward} from '@material-ui/icons'
+import { TextField, Fab } from '@material-ui/core'
+import { ArrowForward } from '@material-ui/icons'
 
-import React, { useState } from 'react'
+import React, { ChangeEvent, useState } from 'react'
+import { Part } from '../../utils/types'
+
+import './CreatePartPage.css'
 
 export const CreatePartPage = (): JSX.Element => {
 
@@ -16,41 +19,79 @@ export const CreatePartPage = (): JSX.Element => {
   const [partDate, setpartDate] = useState('')
   const [partOnEbaySince, setpartOnEbaySince] = useState('')
 
+
+
   const [counter, setcounter] = useState(0)
+
+  const [part, setpart] = useState({
+    title: '',
+    model: '',
+    description: '',
+    pictures: [''],
+    status: '',
+    date: '',
+
+  })
+
 
   const NextButton = () => {
     return (<Fab
       onClick={() => {
-        console.log(counter)
-        setcounter(prevState => prevState+1)
+        console.log(partTitle)
+        setcounter(prevState => prevState + 1)
       }}
       color='primary' >
-      <ArrowForward/>
+      <ArrowForward />
     </Fab>)
   }
 
-  const PartTitlePicker = () => {
+  function PartTitlePicker() {
     return (
-      <form>
-        <TextField
-          onChange={(e) => console.log(e.target.value)}
-          label='Name des Teils' />
+      <form action='submit'>
+        {/* <TextField
+        value= {part.title}
+          onChange={handleChange}
+          label='Name des Teils' /> */}
+        <label>Title</label>
+        <input name='title' onChange={handleChange} />
       </form>
     )
+  }
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target
+    setpart(prevState => ({ ...prevState, [name]: value }))
+
+
+
   }
 
   return (
 
     <div className="create_page_container">
       <div className="collector_container">
-        <h3>{partTitle}</h3>
+        <h3>{part.title}</h3>
       </div>
       <div className="filler_container">
 
-        {counter === 0 ? <PartTitlePicker /> : null}
+
+
+        {counter === 0 ? <div id='part_title_picker' >
+          <form >
+            <TextField
+              name='title'
+              onChange={handleChange}
+              label='Name des Teils' />
+          </form>
+        </div>
+          : null
+        }
+
+      </div>
+      <div
+        className='fab_next'
+      >
         <NextButton />
-
-
       </div>
     </div>
 

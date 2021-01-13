@@ -3,13 +3,13 @@ import { isJSDocNullableType } from "typescript";
 
 export type Part  = {
   id?:number,
-  firebaseId:string
+  firebaseId?:string
   title: string,
   model: string,
   description: string,
   pictures: string[],
   status: string,
   date:string,
-  onEbaySince: string
+  onEbaySince?: string
 
 } | null
