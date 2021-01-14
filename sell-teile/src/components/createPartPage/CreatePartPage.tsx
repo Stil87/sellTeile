@@ -116,7 +116,11 @@ export const CreatePartPage = (): JSX.Element => {
         }
 
         {counter === 3 ?
-          <input type='file' accept="image/*" capture= "environment"  onChange={handleImage}/> : null}
+        <div className="image_picker_container">
+          <input type='file' accept="image/*" capture= "environment"  onChange={handleImage}/> 
+          <input type='file' accept="image/*" capture= "environment"  onChange={handleImage}/> 
+        </div>
+          : null}
       </div>
       <div className='fab_next'>
         <NextButton />

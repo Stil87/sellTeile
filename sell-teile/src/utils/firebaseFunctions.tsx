@@ -34,23 +34,20 @@ export const firebaseLogOut = async () => {
 }
 
 
-export const firebaseUploadImage =async  (img: File) => {
+export const firebaseUploadImage = async (img: File) => {
   // compress img function here
 
 
   const uploadTask = imagesRef.put(img)
- 
-  return uploadTask.on("state_changed",
-  snapshot => console.log('snapshot' ,snapshot),
 
-  error=> {console.log('error',error)}
-  
-  
-  ,async () => {
-    const url = await uploadTask.snapshot.ref.getDownloadURL()
-    console.log('url', url)
-    return url
-  }
+  return uploadTask.on("state_changed",
+    snapshot => console.log('snapshot', snapshot),
+    error => { console.log('error', error) },
+    async () => {
+      const url = await uploadTask.snapshot.ref.getDownloadURL()
+      console.log('url', url)
+      return url
+    }
 
   )
 }
