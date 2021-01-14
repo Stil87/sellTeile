@@ -16,9 +16,17 @@
 
 
 .filler_container{
+  display: flex;
+  justify-content: center;
   background-color: aliceblue;
   flex: 0 0 45vh
   
+}
+
+#part_title_picker {
+
+
+
 }
 
 .fab_next {
@@ -26,5 +34,12 @@
   right: 5vw;
   position: fixed;
   background-color: brown;
+}
+
+
+.fab_previous {
+  bottom: 5vh;
+  left: 5vh;
+  position: fixed;
 }
 
