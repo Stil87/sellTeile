@@ -7,6 +7,8 @@ const storage = fire.storage()
 const storageRef = storage.ref()
 export const imagesRef = storageRef.child('images/')
 
+export const db = fire.firestore()
+
 
 export const firebaseSignUp = async (user: User) => {
   fire.auth().createUserWithEmailAndPassword(user.email, user.password.toString())
@@ -42,6 +44,11 @@ export const resizeImage = async (img: File): Promise<File> => {
   return await imageCompression(img, options)
 
 
+}
+
+export const getNewPartCollectionDocID =async() => {
+  const ref = db.collection('Parts').doc()
+  return ref.id
 }
 
 

@@ -2,8 +2,8 @@
 import { TextField, Fab } from '@material-ui/core'
 import { ArrowBack, ArrowForward } from '@material-ui/icons'
 
-import React, { ChangeEvent, useState } from 'react'
-import {  imagesRef, resizeImage } from '../../utils/firebaseFunctions'
+import React, { ChangeEvent, useEffect, useState } from 'react'
+import { getNewPartCollectionDocID, imagesRef, resizeImage } from '../../utils/firebaseFunctions'
 import { Part } from '../../utils/types'
 
 
@@ -13,20 +13,35 @@ import './CreatePartPage.css'
 export const CreatePartPage = (): JSX.Element => {
 
   const [counter, setcounter] = useState(0)
-  const [images, setimages] = useState([''])
 
   const [part, setpart] = useState<Part>({
     id: undefined,
-    firebaseId: undefined,
+    firebaseId: '',
     title: '',
     model: '',
     description: '',
-    pictures: [''],
+    pictures: [],
     status: '',
     date: '',
-    onEbaySince: undefined
+    onEbaySince: undefined,
+    preis:0
 
   })
+
+  useEffect(() => {
+    async function getId() {
+      const id = await getNewPartCollectionDocID()
+      setpart(prev => ({ ...prev, firebaseId: id }))
+
+    }
+    getId()
+    return () => {
+
+    }
+  }, [])
+
+
+
 
 
 
@@ -59,21 +74,19 @@ export const CreatePartPage = (): JSX.Element => {
   }
 
   const uploadToFirebase = async (resizedImg: File) => {
-    const uploadTask =  imagesRef.child(resizedImg.name).put(resizedImg)
+    const uploadTask = imagesRef.child(part.firebaseId).put(resizedImg)
 
     uploadTask.on("state_changed",
-    snapshot => console.log('snapshot', snapshot),
-    error => { console.log('error', error) },
-    async () => {
-      const url = await uploadTask.snapshot.ref.getDownloadURL()
-      setimages(prev => [...prev, url])
-      
-
-    }
-
-  )
+      snapshot => console.log('snapshot', snapshot),
+      error => { console.log('error', error) },
+      async () => {
+        const url = await uploadTask.snapshot.ref.getDownloadURL()
+        setpart(prev => ({ ...prev, pictures: [...prev.pictures, url] }))
 
 
+      }
+
+    )
 
   }
 
@@ -105,8 +118,10 @@ export const CreatePartPage = (): JSX.Element => {
         <h3>{part.title}</h3>
         <h3>{part.model}</h3>
         <h3>{part.description}</h3>
-        {images.forEach(image => {
-          <img src={image} alt="" />
+        {part.pictures.map(image => {
+          return (<ul>
+            <img src={image} alt="" style={{ height: 40 }} />
+          </ul>)
         })}
       </div>
       <div className="filler_container">
