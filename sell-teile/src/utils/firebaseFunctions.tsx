@@ -1,11 +1,11 @@
-import { Url } from "url"
 import { User } from "../types"
 import fire from "./firebaseConfig"
+import imageCompression from 'browser-image-compression';
 
 //create firebase storage reference for images
 const storage = fire.storage()
 const storageRef = storage.ref()
-const imagesRef = storageRef.child('images/image')
+export const imagesRef = storageRef.child('images/')
 
 
 export const firebaseSignUp = async (user: User) => {
@@ -33,22 +33,19 @@ export const firebaseLogOut = async () => {
     .catch(err => console.log(err))
 }
 
+export const resizeImage = async (img: File): Promise<File> => {
+  const options = {
+    maxSizeMB: 1,
+    maxWidthOrHeight: 1920,
+  }
 
-export const firebaseUploadImage = async (img: File) => {
-  // compress img function here
+  return await imageCompression(img, options)
 
 
-  const uploadTask = imagesRef.put(img)
-
-  return uploadTask.on("state_changed",
-    snapshot => console.log('snapshot', snapshot),
-    error => { console.log('error', error) },
-    async () => {
-      const url = await uploadTask.snapshot.ref.getDownloadURL()
-      console.log('url', url)
-      return url
-    }
-
-  )
 }
+
+
+
+
+
 
