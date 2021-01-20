@@ -1,4 +1,3 @@
-import { isJSDocNullableType } from "typescript";
 
 
 export interface Part   {

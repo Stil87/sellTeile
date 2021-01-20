@@ -24,7 +24,7 @@ export const CreatePartPage = (): JSX.Element => {
     status: '',
     date: '',
     onEbaySince: undefined,
-    preis:0
+    preis: 0
 
   })
 
@@ -32,22 +32,11 @@ export const CreatePartPage = (): JSX.Element => {
     async function getId() {
       const id = await getNewPartCollectionDocID()
       setpart(prev => ({ ...prev, firebaseId: id }))
-
     }
     getId()
     return () => {
-
     }
   }, [])
-
-
-
-
-
-
-
-
-
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
@@ -74,7 +63,7 @@ export const CreatePartPage = (): JSX.Element => {
   }
 
   const uploadToFirebase = async (resizedImg: File) => {
-    const uploadTask = imagesRef.child(part.firebaseId).put(resizedImg)
+    const uploadTask = imagesRef.child(`${part.firebaseId}/${resizedImg.lastModified.toString()}`).put(resizedImg)
 
     uploadTask.on("state_changed",
       snapshot => console.log('snapshot', snapshot),
@@ -82,12 +71,8 @@ export const CreatePartPage = (): JSX.Element => {
       async () => {
         const url = await uploadTask.snapshot.ref.getDownloadURL()
         setpart(prev => ({ ...prev, pictures: [...prev.pictures, url] }))
-
-
       }
-
     )
-
   }
 
   const handleImage = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -99,13 +84,7 @@ export const CreatePartPage = (): JSX.Element => {
 
       const resizedImg = await resizeImage(file)
       uploadToFirebase(resizedImg)
-
-
-
-
     }
-
-
   }
 
 
