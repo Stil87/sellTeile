@@ -6,10 +6,16 @@ export interface Part   {
   title: string,
   model: string,
   description: string,
-  pictures: string[],
+  pictures: PartImage[],
   status: string,
   date:string,
   onEbaySince?: string,
   preis:number
 
 } 
+
+
+export interface PartImage {
+  url: string,
+  id : string
+}

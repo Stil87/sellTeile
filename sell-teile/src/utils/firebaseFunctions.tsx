@@ -1,6 +1,7 @@
 import { User } from "../types"
 import fire from "./firebaseConfig"
 import imageCompression from 'browser-image-compression';
+import { PartImage } from "./types";
 
 //create firebase storage reference for images
 const storage = fire.storage()
@@ -35,6 +36,11 @@ export const firebaseLogOut = async () => {
     .catch(err => console.log(err))
 }
 
+
+
+
+
+
 export const resizeImage = async (img: File): Promise<File> => {
   const options = {
     maxSizeMB: 1,
@@ -46,7 +52,22 @@ export const resizeImage = async (img: File): Promise<File> => {
 
 }
 
-export const getNewPartCollectionDocID =async() => {
+export const deleteImage = (partImage: PartImage, firebaseId: string) => {
+
+  // Delete the file
+  imagesRef
+    .child(`${firebaseId}/${partImage.id}`)
+    .delete()
+    .then(function (e) {
+      console.log('succesful deleted', e)
+      // File deleted successfully
+    }).catch(function (error) {
+      // Uh-oh, an error occurred!
+      console.log('error deleted :', error)
+    });
+}
+
+export const getNewPartCollectionDocID = async () => {
   const ref = db.collection('Parts').doc()
   return ref.id
 }
