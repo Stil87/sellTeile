@@ -1,9 +1,10 @@
 
-import { TextField, Fab } from '@material-ui/core'
-import { ArrowBack, ArrowForward } from '@material-ui/icons'
+import { TextField, Fab, Button } from '@material-ui/core'
+import { ArrowBack, ArrowForward, } from '@material-ui/icons'
+import SendIcon from '@material-ui/icons/Send';
 
 import React, { ChangeEvent, useEffect, useState } from 'react'
-import { deleteImage, getNewPartCollectionDocID, imagesRef, resizeImage } from '../../utils/firebaseFunctions'
+import { createNextPartId, deleteImage, getLastPartId, getNewPartCollectionDocID, imagesRef, resizeImage, saveNewPart } from '../../utils/firebaseFunctions'
 import { Part, PartImage } from '../../utils/types'
 import { PartCard } from '../PartCard/PartCard'
 
@@ -13,12 +14,12 @@ import './CreatePartPage.css'
 
 export const CreatePartPage = (): JSX.Element => {
 
-  const [imgCounter , setImgCounter] = useState(0)
+  const [imgCounter, setImgCounter] = useState(0)
 
   const [counter, setcounter] = useState(0)
 
   const [part, setpart] = useState<Part>({
-    id: undefined,
+    id: 1,
     firebaseId: '',
     title: '',
     model: '',
@@ -26,17 +27,24 @@ export const CreatePartPage = (): JSX.Element => {
     pictures: [],
     status: '',
     date: '',
-    onEbaySince: undefined,
+    onEbaySince: 'in Datenbank hochgeladen',
     preis: 0
 
   })
 
   useEffect(() => {
-    async function getId() {
-      const id = await getNewPartCollectionDocID()
-      setpart(prev => ({ ...prev, firebaseId: id }))
+    async function getFirebaseId() {
+      const firebaseId = await getNewPartCollectionDocID()
+
+      const lastPartId = await getLastPartId();
+      const nextPartId = await createNextPartId(lastPartId, firebaseId)
+      setpart(prev => ({ ...prev, id: nextPartId, firebaseId }))
     }
-    getId()
+
+
+
+
+    getFirebaseId()
     return () => {
     }
   }, [])
@@ -67,7 +75,7 @@ export const CreatePartPage = (): JSX.Element => {
 
   const uploadToFirebase = async (resizedImg: File) => {
     const partImage: PartImage = { url: '', id: imgCounter.toString() }
-    console.log('partImage' , partImage)
+    console.log('partImage', partImage)
     const uploadTask = imagesRef.child(`${part.firebaseId}/${partImage.id}`).put(resizedImg)
 
     uploadTask.on("state_changed",
@@ -77,7 +85,7 @@ export const CreatePartPage = (): JSX.Element => {
         const url = await uploadTask.snapshot.ref.getDownloadURL()
         partImage.url = url
         setpart(prev => ({ ...prev, pictures: [partImage, ...prev.pictures] }))
-        setImgCounter(prev=> prev+1)
+        setImgCounter(prev => prev + 1)
       }
     )
   }
@@ -109,12 +117,19 @@ export const CreatePartPage = (): JSX.Element => {
     setpart(prev => ({ ...prev, pictures: updated }))
 
   }
+  /*
+  <button onClick={(e) => this.deleteRow(id, e)}>Delete Row</button>
+<button onClick={this.deleteRow.bind(this, id)}>Delete Row</button>
+ */
 
-
+  const elements = (<h2>{counter}</h2>)
   return (
 
     <div className="create_page_container">
       <div className="collector_container">
+        <h2>{imgCounter}</h2>
+        <h2>{counter}</h2>
+        {elements}
         {/*   {/* add a Part card here  }
         <h3>{part.title}</h3>
         <h3>{part.model}</h3>
@@ -128,7 +143,7 @@ export const CreatePartPage = (): JSX.Element => {
         <PartCard part={part} handleDelete={handleDelete} />
       </div>
       <div className="filler_container">
-        {counter === 0 ? <div id='part_title_picker' >
+        {counter === 0 && <div id='part_title_picker' >
           <form >
             <TextField
               name='title'
@@ -136,7 +151,7 @@ export const CreatePartPage = (): JSX.Element => {
               label='Name des Teils' />
           </form>
         </div>
-          : null
+
         }
 
 
@@ -182,10 +197,14 @@ export const CreatePartPage = (): JSX.Element => {
             <input className='image_picker' type='file' accept="image/*" capture="environment" onChange={handleImage} />
           </div>
           : null}
+
+        {counter === 5 && <Button onClick={() => saveNewPart(part)}>
+          <SendIcon></SendIcon>
+        </Button>}
       </div>
-      <div className='fab_next'>
+      {counter <= 4 ? <div className='fab_next'>
         <NextButton />
-      </div>
+      </div> : null}
       <div className='fab_previous'>
 
         {counter > 0 ? <PreviousButton /> : null}

@@ -1,7 +1,8 @@
 import { User } from "../types"
 import fire from "./firebaseConfig"
 import imageCompression from 'browser-image-compression';
-import { PartImage } from "./types";
+import { Part, PartImage } from "./types";
+import { Timestamp } from "@firebase/firestore-types";
 
 //create firebase storage reference for images
 const storage = fire.storage()
@@ -41,6 +42,10 @@ export const firebaseLogOut = async () => {
 
 
 
+
+
+
+
 export const resizeImage = async (img: File): Promise<File> => {
   const options = {
     maxSizeMB: 1,
@@ -72,6 +77,38 @@ export const getNewPartCollectionDocID = async () => {
   return ref.id
 }
 
+
+
+export const saveNewPart = (part: Part) => {
+  db.collection("Parts").doc(part.firebaseId).set(part) //Object.assign({}, part)
+    .then(function () {
+      console.log("Document successfully written!");
+    })
+    .catch(function (error) {
+      console.error("Error writing document: ", error);
+    });
+
+}
+
+export const getLastPartId = async () => {
+
+  return db.collection('PartIDs').get().then(snap => {
+    console.log('snap size current part id', snap.size)
+    return snap.size
+  })
+
+}
+
+export const createNextPartId = async (lastPartId: number , firebaseId : string): Promise<number> => {
+  return db.collection('PartIDs').doc().set({ id: lastPartId + 1, created: Date.now() , firebaseId}).then(
+    () => {
+      console.log('lastPartId: ', lastPartId, ' nextPartId: ', lastPartId + 1)
+      return lastPartId + 1
+    }
+  )
+
+
+}
 
 
 

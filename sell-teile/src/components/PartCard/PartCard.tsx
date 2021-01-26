@@ -1,11 +1,8 @@
-import { Button, Card, CardActions, CardContent, GridList, GridListTile, GridListTileBar, IconButton, makeStyles, Typography } from "@material-ui/core";
+import { Card,   CardContent, GridList, GridListTile, GridListTileBar, IconButton, makeStyles, Typography } from "@material-ui/core";
 import React from "react";
-import StarBorderIcon from '@material-ui/icons/StarBorder';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { Part, PartImage } from "../../utils/types";
-import { createNonNullChain, isNamedExports, isNonNullExpression } from "typescript";
-import { DeleteForever } from "@material-ui/icons";
-import { KeyObject } from "crypto";
+
 
 const useStyles = makeStyles({
   root: {
@@ -29,7 +26,7 @@ export const PartCard = ({part, handleDelete} : {part:Part, handleDelete: Functi
 
 
   const classes = useStyles();
-  const bull = <span className={classes.bullet}>•</span>;
+  // const bull = <span className={classes.bullet}>•</span>;
 
  
 
